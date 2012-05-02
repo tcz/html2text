@@ -1,6 +1,4 @@
-
-<!-- saved from url=(0099)http://iaml.googlecode.com/svn/trunk/org.openiaml.model.runtime/src/include/html2text/html2text.php -->
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><style type="text/css"></style></head><body><pre style="word-wrap: break-word; white-space: pre-wrap;">&lt;?php
+<?php
 /******************************************************************************
  * Copyright (c) 2010 Jevon Wright and others.
  * All rights reserved. This program and the accompanying materials
@@ -16,11 +14,11 @@
  * Tries to convert the given HTML into a plain text format - best suited for
  * e-mail display, etc.
  *
- * &lt;p&gt;In particular, it tries to maintain the following features:
- * &lt;ul&gt;
- *   &lt;li&gt;Links are maintained, with the 'href' copied over
- *   &lt;li&gt;Information in the &amp;lt;head&amp;gt; is lost
- * &lt;/ul&gt;
+ * <p>In particular, it tries to maintain the following features:
+ * <ul>
+ *   <li>Links are maintained, with the 'href' copied over
+ *   <li>Information in the <head&gt; is lost
+ * </ul>
  *
  * @param html the input HTML
  * @return the HTML converted, as best as possible, to text
@@ -29,7 +27,7 @@ function convert_html_to_text($html) {
 	$html = fix_newlines($html);
 
 	$doc = new DOMDocument();
-	if (!$doc-&gt;loadHTML($html))
+	if (!$doc->loadHTML($html))
 		throw new Html2TextException("Could not load HTML - badly formed?", $html);
 
 	$output = iterate_over_node($doc);
@@ -62,32 +60,32 @@ function fix_newlines($text) {
 
 function next_child_name($node) {
 	// get the next child
-	$nextNode = $node-&gt;nextSibling;
+	$nextNode = $node->nextSibling;
 	while ($nextNode != null) {
 		if ($nextNode instanceof DOMElement) {
 			break;
 		}
-		$nextNode = $nextNode-&gt;nextSibling;
+		$nextNode = $nextNode->nextSibling;
 	}
 	$nextName = null;
-	if ($nextNode instanceof DOMElement &amp;&amp; $nextNode != null) {
-		$nextName = strtolower($nextNode-&gt;nodeName);
+	if ($nextNode instanceof DOMElement && $nextNode != null) {
+		$nextName = strtolower($nextNode->nodeName);
 	}
 
 	return $nextName;
 }
 function prev_child_name($node) {
 	// get the previous child
-	$nextNode = $node-&gt;previousSibling;
+	$nextNode = $node->previousSibling;
 	while ($nextNode != null) {
 		if ($nextNode instanceof DOMElement) {
 			break;
 		}
-		$nextNode = $nextNode-&gt;previousSibling;
+		$nextNode = $nextNode->previousSibling;
 	}
 	$nextName = null;
-	if ($nextNode instanceof DOMElement &amp;&amp; $nextNode != null) {
-		$nextName = strtolower($nextNode-&gt;nodeName);
+	if ($nextNode instanceof DOMElement && $nextNode != null) {
+		$nextName = strtolower($nextNode->nodeName);
 	}
 
 	return $nextName;
@@ -95,7 +93,7 @@ function prev_child_name($node) {
 
 function iterate_over_node($node) {
 	if ($node instanceof DOMText) {
-		return preg_replace("/\\s+/im", " ", $node-&gt;wholeText);
+		return preg_replace("/\\s+/im", " ", $node->wholeText);
 	}
 	if ($node instanceof DOMDocumentType) {
 		// ignore
@@ -105,7 +103,7 @@ function iterate_over_node($node) {
 	$nextName = next_child_name($node);
 	$prevName = prev_child_name($node);
 
-	$name = strtolower($node-&gt;nodeName);
+	$name = strtolower($node->nodeName);
 
 	// start whitespace
 	switch ($name) {
@@ -145,8 +143,8 @@ function iterate_over_node($node) {
 	// debug
 	//$output .= "[$name,$nextName]";
 
-	for ($i = 0; $i &lt; $node-&gt;childNodes-&gt;length; $i++) {
-		$n = $node-&gt;childNodes-&gt;item($i);
+	for ($i = 0; $i < $node->childNodes->length; $i++) {
+		$n = $node->childNodes->item($i);
 
 		$text = iterate_over_node($n);
 
@@ -181,16 +179,16 @@ function iterate_over_node($node) {
 
 		case "div":
 			// add one line only if the next child isn't a div
-			if ($nextName != "div" &amp;&amp; $nextName != null)
+			if ($nextName != "div" && $nextName != null)
 				$output .= "\n";
 			break;
 
 		case "a":
 			// links are returned in [text](link) format
-			$href = $node-&gt;getAttribute("href");
+			$href = $node->getAttribute("href");
 			if ($href == null) {
 				// it doesn't link anywhere
-				if ($node-&gt;getAttribute("name") != null) {
+				if ($node->getAttribute("name") != null) {
 					$output = "[$output]";
 				}
 			} else {
@@ -222,7 +220,6 @@ class Html2TextException extends Exception {
 
 	public function __construct($message = "", $more_info = "") {
 		parent::__construct($message);
-		$this-&gt;more_info = $more_info;
+		$this->more_info = $more_info;
 	}
 }
-</pre></body></html>
